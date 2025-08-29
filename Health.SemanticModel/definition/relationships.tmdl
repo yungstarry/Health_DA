@@ -1,0 +1,4 @@
+relationship b9cae30e-f318-4799-6a1d-9ba102377dbc
+	fromColumn: 'Hospital ER Dataset'.date
+	toColumn: Dates.Date
+

@@ -1,0 +1,194 @@
+table _Measures
+	lineageTag: 91ee25c1-d96c-4ed2-ad69-6d8359cb1b0e
+
+	measure 'Total Patients' = COUNTROWS('Hospital ER Dataset')
+		formatString: #,0
+		lineageTag: 931b1f7b-d46d-4c24-9026-811af38e5db8
+
+	measure '% Admin Schedule' = DIVIDE(COUNTROWS(FILTER('Hospital ER Dataset','Hospital ER Dataset'[patient_admin_flag] =TRUE())),[Total Patients])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: a10ef612-99ed-46cc-9065-32f2a50107ed
+
+	measure '% None_Admin Schedule' = DIVIDE(COUNTROWS(FILTER('Hospital ER Dataset','Hospital ER Dataset'[patient_admin_flag] =FALSE())),[Total Patients])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 8151f8fd-d329-4803-8712-7584fa137e34
+
+	measure 'Avg Satisfaction Score' = CALCULATE(AVERAGE('Hospital ER Dataset'[patient_sat_score]),'Hospital ER Dataset'[patient_sat_score] <> BLANK())
+		lineageTag: 59221113-9e97-4c2b-8004-bf19ce376ea9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '% No rating' = ```
+			
+			    var _NoRating= 
+			    CALCULATE([Total Patients], 'Hospital ER Dataset'[patient_sat_score] = BLANK())
+			    RETURN 
+			    DIVIDE(_NoRating, [Total Patients])
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: a5d96d69-82c1-479d-9c3b-4ff9299bf7ac
+
+	measure 'Avg Wait Time' = AVERAGE('Hospital ER Dataset'[patient_waittime])
+		lineageTag: 3852a888-0639-4a8f-bf81-3c4ae8b707dd
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'CF Max Point (MonTH)' = ```
+			
+			    VAR _PatientTable =
+			    CALCULATETABLE(
+			        ADDCOLUMNS(
+			        SUMMARIZE(Dates,Dates[MonthNameShort]),
+			        "@Total_Patients",[Total Patients]),
+			        ALLSELECTED()
+			    )
+			    VAR _MinVal = MINX(_PatientTable, [@Total_Patients])
+			    VAR _MaxVal = MAXX(_PatientTable, [@Total_Patients])
+			    VAR _TotalPatient = [Total Patients]
+			    RETURN SWITCH(
+			        TRUE(),
+			        _TotalPatient = _MinVal, 0,
+			        _TotalPatient = _MaxVal, 1)
+			
+			```
+		formatString: 0
+		lineageTag: decd58dd-a6cf-4c1b-a981-8636394eb42d
+
+	measure 'Values Max Point (MonTH)' = ```
+			
+			    VAR _PatientTable =
+			    CALCULATETABLE(
+			        ADDCOLUMNS(
+			        SUMMARIZE(Dates,Dates[MonthNameShort]),
+			        "@Total_Patients",[Total Patients]),
+			        ALLSELECTED()
+			    )
+			    VAR _MinVal = MINX(_PatientTable, [@Total_Patients])
+			    VAR _MaxVal = MAXX(_PatientTable, [@Total_Patients])
+			    VAR _TotalPatient = [Total Patients]
+			    RETURN SWITCH(
+			        TRUE(),
+			        _TotalPatient = _MinVal, [Total Patients],
+			        _TotalPatient = _MaxVal, [Total Patients])
+			
+			```
+		formatString: 0
+		lineageTag: 10448c94-7afe-487b-9a1f-5e28fc356e53
+
+	measure 'CF Max Point (Year)' = ```
+			
+			    VAR _PatientTable =
+			    CALCULATETABLE(
+			        ADDCOLUMNS(
+			        SUMMARIZE(Dates,Dates[Year]),
+			        "@Total_Patients",[Total Patients]),
+			        ALLSELECTED()
+			    )
+			    VAR _MinVal = MINX(_PatientTable, [@Total_Patients])
+			    VAR _MaxVal = MAXX(_PatientTable, [@Total_Patients])
+			    VAR _TotalPatient = [Total Patients]
+			    RETURN SWITCH(
+			        TRUE(),
+			        _TotalPatient = _MinVal, 0,
+			        _TotalPatient = _MaxVal, 1)
+			
+			```
+		formatString: 0
+		lineageTag: 68e752f4-b83f-47c5-9d9b-d834057b8d19
+
+	measure 'Values Max Point (Year)' = ```
+			
+			    VAR _PatientTable =
+			    CALCULATETABLE(
+			        ADDCOLUMNS(
+			        SUMMARIZE(Dates,Dates[Year]),
+			        "@Total_Patients",[Total Patients]),
+			        ALLSELECTED()
+			    )
+			    VAR _MinVal = MINX(_PatientTable, [@Total_Patients])
+			    VAR _MaxVal = MAXX(_PatientTable, [@Total_Patients])
+			    VAR _TotalPatient = [Total Patients]
+			    RETURN SWITCH(
+			        TRUE(),
+			        _TotalPatient = _MinVal, [Total Patients],
+			        _TotalPatient = _MaxVal, [Total Patients])
+			
+			```
+		formatString: 0
+		lineageTag: 072ec1db-1d6c-4aa7-89f0-2b7b2e51e1ed
+
+	measure '% Un Referred Patients' = ```
+			
+			    VAR _FilterPatients =
+			        CALCULATE([Total Patients], 'Hospital ER Dataset'[department_referral] = "None")
+			    RETURN
+			        DIVIDE(_FilterPatients,[Total Patients],0)
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 42f14ebc-3ec2-4632-ab90-8185b11d6a98
+
+	measure '% Referred Patients' = ```
+			
+			    VAR _FilterPatients =
+			        CALCULATE([Total Patients], 'Hospital ER Dataset'[department_referral] <> "None")
+			    RETURN
+			        DIVIDE(_FilterPatients,[Total Patients],0)
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: bcd9a3be-54ef-4196-b7b0-90426b3ff282
+
+	measure 'HeatMap Caption' = ```
+			
+			    VAR _SelectedMeasure = SELECTEDVALUE(Parameter[Parameter Order])
+			    RETURN
+			    IF(_SelectedMeasure = 0, "The deepest SKY BLUE on the scale indicates the lowest wait time for the age group.", "Patients are MOST satisfied when the scale displays the deepest SKY BLUE for the age group.")
+			```
+		lineageTag: 3c9b865f-b03d-4ceb-9839-54d418aa42dd
+
+	measure '% Male Visit' = ```
+			
+			 VAR _totatMale = CALCULATE(COUNTROWS('Hospital ER Dataset'),'Hospital ER Dataset'[patient_gender] = "M")
+			 VAR _totalGender = COUNTROWS('Hospital ER Dataset')
+			
+			 RETURN 
+			 DIVIDE(_totatMale,_totalGender,0) 
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: a2e3f400-45d6-4fa5-a7ac-80c55a915f05
+
+	measure '% Female Visit' = ```
+			
+			 VAR _totatFemale = CALCULATE(COUNTROWS('Hospital ER Dataset'),'Hospital ER Dataset'[patient_gender] = "F")
+			 VAR _totalGender = COUNTROWS('Hospital ER Dataset')
+			
+			 RETURN 
+			 DIVIDE(_totatFemale,_totalGender,0) 
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 2865f1f2-80b0-4efe-b160-d51f5f3f5ddb
+
+	measure '% Unknown Visit' = ```
+			
+			 VAR _totalNC = CALCULATE(COUNTROWS('Hospital ER Dataset'),'Hospital ER Dataset'[patient_gender] = "NC")
+			 VAR _totalGender = COUNTROWS('Hospital ER Dataset')
+			
+			 RETURN 
+			 DIVIDE(_totalNC,_totalGender,0)
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 07cd7a2c-59f0-4447-a397-4e018cf4b29d
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	changedProperty = Name
+
+	annotation PBI_ResultType = Table
+

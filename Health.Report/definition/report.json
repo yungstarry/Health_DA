@@ -1,0 +1,107 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.0.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY24SU10",
+      "reportVersionAtImport": {
+        "visual": "1.8.95",
+        "report": "2.0.95",
+        "page": "1.3.95"
+      },
+      "type": "SharedResources"
+    }
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "publicCustomVisuals": [
+    "PBI_CV_25997FEB_F466_44FA_B562_AC4063283C4C"
+  ],
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY24SU10",
+          "path": "BaseThemes/CY24SU10.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "hourglass22731305212871045.png",
+          "path": "hourglass22731305212871045.png",
+          "type": "Image"
+        },
+        {
+          "name": "satisfaction05614903648618674.png",
+          "path": "satisfaction05614903648618674.png",
+          "type": "Image"
+        },
+        {
+          "name": "search6238102890270351.png",
+          "path": "search6238102890270351.png",
+          "type": "Image"
+        },
+        {
+          "name": "male6150990607687244.png",
+          "path": "male6150990607687244.png",
+          "type": "Image"
+        },
+        {
+          "name": "female8002278690318211.png",
+          "path": "female8002278690318211.png",
+          "type": "Image"
+        },
+        {
+          "name": "non-binary4845645132713161.png",
+          "path": "non-binary4845645132713161.png",
+          "type": "Image"
+        },
+        {
+          "name": "pow-bi_new12573095010772306.png",
+          "path": "pow-bi_new12573095010772306.png",
+          "type": "Image"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true
+  }
+}

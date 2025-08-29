@@ -1,0 +1,84 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.1.0/schema.json",
+  "name": "ad85e86be8284393bcf7",
+  "position": {
+    "x": 889.43120157654619,
+    "y": 436.62986259212266,
+    "z": 17000,
+    "height": 145.54328753070754,
+    "width": 374.43187646788869,
+    "tabOrder": 17000
+  },
+  "visual": {
+    "visualType": "multiRowCard",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "% Male Visit"
+                }
+              },
+              "queryRef": "_Measures.% Male Visit",
+              "nativeQueryRef": "% Male Visit"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "% Female Visit"
+                }
+              },
+              "queryRef": "_Measures.% Female Visit",
+              "nativeQueryRef": "% Female Visit"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "% Unknown Visit"
+                }
+              },
+              "queryRef": "_Measures.% Unknown Visit",
+              "nativeQueryRef": "% Unknown Visit"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Measures"
+                  }
+                },
+                "Property": "% Male Visit"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

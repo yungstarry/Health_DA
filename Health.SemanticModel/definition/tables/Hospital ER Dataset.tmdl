@@ -1,0 +1,150 @@
+table 'Hospital ER Dataset'
+	lineageTag: 3b6019f5-eec9-4fb4-aa9e-edaf48e96543
+
+	column date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 76b956e0-ba4a-419f-ab3b-655af991998b
+		summarizeBy: none
+		sourceColumn: date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column patient_id
+		dataType: string
+		lineageTag: f9d53789-e1a1-4e78-a19b-a50cf5f38371
+		summarizeBy: none
+		sourceColumn: patient_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column patient_gender
+		dataType: string
+		lineageTag: 047b14dd-1140-4b83-9ab4-b3aed109beae
+		summarizeBy: none
+		sourceColumn: patient_gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column patient_age
+		dataType: int64
+		formatString: 0
+		lineageTag: 31539546-be06-41af-8fa4-65fc3f71517e
+		summarizeBy: sum
+		sourceColumn: patient_age
+
+		annotation SummarizationSetBy = Automatic
+
+	column patient_sat_score
+		dataType: int64
+		formatString: 0
+		lineageTag: 8bacb83a-bfa7-4f65-8ccb-4df87a47ebcf
+		summarizeBy: sum
+		sourceColumn: patient_sat_score
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Full Name'
+		dataType: string
+		lineageTag: 84502597-b221-40e5-9a6f-2ac30814b938
+		summarizeBy: none
+		sourceColumn: Full Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column patient_race
+		dataType: string
+		lineageTag: 380f2a17-ecff-45cc-b7e1-563e9611253d
+		summarizeBy: none
+		sourceColumn: patient_race
+
+		annotation SummarizationSetBy = Automatic
+
+	column patient_admin_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 08e6944c-8e5b-48fe-b1c5-22297571e01f
+		summarizeBy: none
+		sourceColumn: patient_admin_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column patient_waittime
+		dataType: int64
+		formatString: 0
+		lineageTag: b63538d8-d84a-4475-a99d-fe6ddcc179d7
+		summarizeBy: sum
+		sourceColumn: patient_waittime
+
+		annotation SummarizationSetBy = Automatic
+
+	column department_referral
+		dataType: string
+		lineageTag: 1b3cda92-7056-46b0-ab4d-b81b8a02ecae
+		summarizeBy: none
+		sourceColumn: department_referral
+
+		annotation SummarizationSetBy = Automatic
+
+	column Moments
+		dataType: string
+		lineageTag: 6440d317-9be0-4a88-a747-905e24761f15
+		summarizeBy: none
+		sourceColumn: Moments
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Age Bucket' = ```
+			SWITCH(   
+			    TRUE(),
+			    'Hospital ER Dataset'[patient_age] <= 10, "0-10",
+			    'Hospital ER Dataset'[patient_age] <= 20, "11-20",
+			    'Hospital ER Dataset'[patient_age] <= 30, "21-30",
+			    'Hospital ER Dataset'[patient_age] <= 40, "31-40",
+			    'Hospital ER Dataset'[patient_age] <= 50, "41-50",
+			    'Hospital ER Dataset'[patient_age] <= 60, "51-60",
+			    'Hospital ER Dataset'[patient_age] <= 70, "61-70",
+			    "70+"
+			  )
+			```
+		lineageTag: 88794afe-3f45-4268-97e0-d228edb9893e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Age Group' = ```
+			
+			SWITCH(
+			    TRUE(),
+			    'Hospital ER Dataset'[patient_age] <= 2, "Infant",
+			    'Hospital ER Dataset'[patient_age] <= 6, "Early Childhood",
+			    'Hospital ER Dataset'[patient_age] <= 12, "Middle Childhood",
+			    'Hospital ER Dataset'[patient_age] <= 18, "Teenager",
+			    "Adult")
+			    
+			```
+		lineageTag: d29f20e3-ed86-40f5-8849-d17334994562
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Hospital ER Dataset' = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\HP\OneDrive\Desktop\Health_DA\Hospital ER.csv"),[Delimiter=",", Columns=11, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"date", type datetime}, {"patient_id", type text}, {"patient_gender", type text}, {"patient_age", Int64.Type}, {"patient_sat_score", Int64.Type}, {"patient_first_inital", type text}, {"patient_last_name", type text}, {"patient_race", type text}, {"patient_admin_flag", type logical}, {"patient_waittime", Int64.Type}, {"department_referral", type text}}),
+				    #"Inserted Last Characters" = Table.AddColumn(#"Changed Type", "Last Characters", each Text.End(Text.From([date], "en-US"), 2), type text),
+				    #"Renamed Columns" = Table.RenameColumns(#"Inserted Last Characters",{{"Last Characters", "Moments"}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns",{{"date", type date}}),
+				    #"Merged Columns" = Table.CombineColumns(#"Changed Type1",{"patient_first_inital", "patient_last_name"},Combiner.CombineTextByDelimiter(" ", QuoteStyle.None),"Full Name")
+				in
+				    #"Merged Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

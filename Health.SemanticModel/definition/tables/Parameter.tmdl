@@ -1,0 +1,48 @@
+table Parameter
+	lineageTag: 099419cc-6fc2-462c-a3de-f38e230a0e29
+
+	column Parameter
+		lineageTag: 55715882-7e9d-4e57-b514-a7a0b903c5a9
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Parameter Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Parameter Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parameter Fields'
+		isHidden
+		lineageTag: 804b5b4c-522a-4544-84b3-53baa947e7fd
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Parameter Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Parameter Order'
+		isHidden
+		formatString: 0
+		lineageTag: f4fbe9e9-fcf7-49ac-b5c4-26700d70e896
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Parameter = calculated
+		mode: import
+		source =
+				{
+				    ("Avg Satisfaction Score", NAMEOF('_Measures'[Avg Satisfaction Score]), 0),
+				    ("Avg Wait Time", NAMEOF('_Measures'[Avg Wait Time]), 1)
+				}
+
+	annotation PBI_Id = 99219763579b458ba2619679b9b67140
+
