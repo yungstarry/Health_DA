@@ -98,3 +98,7 @@ Heatmaps highlight satisfaction across demographic groups.
 - Monitor satisfaction heatmaps by demographic to target improvements.  
 - Continue end-to-end use of Power BI for ongoing monitoring, reporting, and decision support.  
 
+
+
+[Click to Check on Power Bi Service](https://app.powerbi.com/view?r=eyJrIjoiZjFhMWViNjItZDE0NC00ODkzLWJjZTYtMzYxMGU2NGQ0ODk0IiwidCI6IjhmNzg3ODg0LTA2MTctNDEzMi05MzFhLTQyYjljM2ViNjM3YiJ9)
+
